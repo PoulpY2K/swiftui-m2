@@ -11,54 +11,110 @@ struct LootDetailView: View {
     @State var item: LootItem
     
     var body: some View {
-        VStack(alignment: .leading) {
+        VStack {
+            HStack(alignment: .top) {
+                VStack {
+                    Text(item.type.rawValue)
+                        .font(.largeTitle)
+                        .padding(20)
+                        .background(Gradient(colors: [item.rarity.color.opacity(0.4), item.rarity.color]))
+                        .cornerRadius(16)
+                        .shadow(color:item.rarity.color, radius: 30)
+                    Text(item.name)
+                        .font(.title)
+                        .fontWeight(.black)
+                        .foregroundStyle(item.rarity.color)
+                        .padding()
+                }
+            }
+            .frame(maxHeight: .infinity)
+            .padding()
+            
+            if item.rarity == .unique {
+                HStack {
+                    Text("Item Unique 🏆")
+                        .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/)
+                        .font(.headline)
+                        .fontWeight(.bold)
+                        .foregroundColor(.white)
+                        .padding()
+                        .background(Gradient(colors: [item.rarity.color.opacity(0.7), item.rarity.color]))
+                        .cornerRadius(16)
+                }.padding()
+            }
+            
             HStack {
-                Text(item.name)
-                    .font(.title)
-                    .padding()
-                
                 Spacer()
-                
-                // Affiche l'icône de rareté dans un carré stylisé
-                Text("Test")
-                    .font(.title)
-                    .frame(width: 30, height: 30)
-                    .foregroundColor(item.rarity.color)
-                    .background(Color.gray.opacity(0.2))
-                    .cornerRadius(8)
-                    .padding()
+                VStack {
+                    HStack{
+                        Text("Informations").textCase(.uppercase).font(.footnote).foregroundStyle(.secondary)
+                        Spacer()
+                    }.padding(.horizontal)
+                    VStack {
+                        HStack {
+                            if let cover = item.game.coverName, let image = UIImage(named: cover) {
+                                Image(uiImage: image)
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .frame(height: 58)
+                                    .cornerRadius(4)
+                            } else {
+                                Rectangle()
+                                    .frame(width: 40, height:58)
+                                    .foregroundStyle(.clear)
+                                    .background(Gradient(colors: [.gray.opacity(0.4)]))
+                                    .overlay(
+                                        Image(systemName: "rectangle.slash").padding()
+                                    )
+                                    .cornerRadius(4)
+                            }
+                            Text(item.game.name)
+                            Spacer()
+                        }
+                        Divider()
+                        HStack {
+                            Text("In-game: \(item.name)")
+                            Spacer()
+                        }
+                        Divider()
+                        if let atkStrength = item.atkStrength {
+                            HStack {
+                                Text("Puissance (ATQ): \(atkStrength)")
+                                Spacer()
+                            }
+                            Divider()
+                        }
+                        if let dfsStrength = item.dfsStrength {
+                            HStack {
+                                Text("Défense (DFS): \(dfsStrength)")
+                                Spacer()
+                            }
+                            Divider()
+                        }
+                        HStack {
+                            Text("Possédé(s): \(item.quantity)")
+                            Spacer()
+                        }
+                        Divider()
+                        HStack {
+                            Text("Rareté: \(item.rarity.rawValue.capitalized)")
+                            Spacer()
+                        }
+                    }.padding().background(.white).clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
+                    Spacer()
+                }
+                .frame(maxHeight: .infinity)
+                Spacer()
             }
-            
-            Divider()
-            
-            // Résumé des informations
-            Text("Quantité: \(item.quantity)")
-                .padding()
-            
-            Text("Type: \(item.type.rawValue)")
-                .padding()
-            
-            Text("Rareté: Test")
-                .padding()
-            
-            if let atkStrength = item.atkStrength {
-                Text("Force d'attaque: \(atkStrength)")
-                    .padding()
-            }
-            
-            if let dfsStrength = item.dfsStrength {
-                Text("Force de défense: \(dfsStrength)")
-                    .padding()
-            }
-            
-            Divider()
-            
-            Text("Jeu Associé: \(item.game.name)")
-                .font(.headline)
-                .padding()
-            
-            Spacer()
+            .frame(maxHeight: .infinity)
+            .padding()
+            .background(Color(UIColor.systemGroupedBackground))
         }
-        .navigationTitle("Détails de l'objet")
+        .frame(maxHeight: .infinity)
+        .background(.white)
     }
+}
+
+#Preview {
+    LootDetailView(item: LootItem(quantity: 3, name: "Épée de Feu", type: .dagger, rarity: .unique, atkStrength: 35, game: availableGames[0]))
 }

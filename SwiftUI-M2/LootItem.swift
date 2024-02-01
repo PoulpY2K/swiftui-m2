@@ -8,7 +8,7 @@
     import Foundation
     import SwiftUI
 
-    enum Rarity: CaseIterable {
+    enum Rarity: String, CaseIterable {
         case common, uncommon, rare, epic, legendary, unique
     }
 

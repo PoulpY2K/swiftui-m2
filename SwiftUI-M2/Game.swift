@@ -22,7 +22,7 @@ struct Game: Identifiable, Hashable {
 
 // Hesitez pas mettre vos propres jeux dans la liste
 let availableGames = [
-    Game(name: "Elden Ring", genre: .rpg, coverName: "elden"),
+    Game(name: "Elden Ring", genre: .rpg, coverName: nil),
     Game(name: "Skyrim", genre: .rpg, coverName: "skyrim"),
     Game(name: "Cyberpunk 2077", genre: .rpg, coverName: "cyberpunk"),
     Game(name: "Minecraft", genre: .rpg, coverName: "minecraft"),
